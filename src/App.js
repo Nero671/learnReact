@@ -51,7 +51,18 @@ class App extends React.Component {
           onClick={this.changeTitleHandler.bind(this, 'Change!')}
         >Change title</button>
 
-        <Car 
+        { this.state.cars.map((car, index) => {
+          return(
+            <Car 
+              key={index}
+              name={car.name}
+              year={car.year}
+              onChangeTitle={() => this.changeTitleHandler(car.name)}
+            />
+          )
+        }) }
+
+        {/* <Car 
           name={cars[0].name} 
           year={cars[0].year} 
           onChangeTitle={this.changeTitleHandler.bind(this, cars[0].name)}
@@ -65,7 +76,7 @@ class App extends React.Component {
           name={cars[2].name} 
           year={cars[2].year} 
           onChangeTitle={() => this.changeTitleHandler(cars[2].name)}
-        />
+        /> */}
       </div>
     );
   }
