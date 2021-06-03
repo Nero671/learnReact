@@ -25,11 +25,14 @@ class App extends React.Component {
   }
 
   changeTitleHandler = (newTitle) => {
-
-
-    
     this.setState({
       pageTitle: newTitle 
+    })
+  }
+
+  handleInput = (event) => {
+    this.setState({
+      pageTitle: event.target.value
     })
   }
 
@@ -43,7 +46,7 @@ class App extends React.Component {
     return (
       <div style={divStyle}>
         <h1>{this.state.pageTitle}</h1>
-
+        <input type="text" onChange={this.handleInput} />
         <button 
           onClick={this.changeTitleHandler.bind(this, 'Change!')}
         >Change title</button>
