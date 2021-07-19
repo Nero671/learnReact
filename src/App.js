@@ -1,8 +1,12 @@
 import React from 'react';
 import './App.css';
-import Main from './Main/Main';
+import Main from './containers/Main/Main';
 import MenuToggle from './Navigation/ComponentMenuToggle/MenuToggle';
 import Drawer from './Navigation/Drawer/Drawer';
+import { BrowserRouter, Route } from "react-router-dom";
+import Auth from './containers/Auth/Auth';
+import QuizCreator from './containers/QuizCreator/QuizCreator';
+import QuizList from './containers/QuizList/QuizList';
 
 class App extends React.Component {
 
@@ -25,17 +29,25 @@ class App extends React.Component {
   render() {
 
     return (
-      <>
-        <Drawer 
-          isOpen={this.state.menu}
-          onClose={this.menuCloseHandler}
-        />
-        <MenuToggle 
-          onToggle={this.toggleMenuHandler} 
-          isOpen={this.state.menu}
-        />
-        <Main />
-      </>
+      <BrowserRouter>
+        {/* <Route exact path=""></Route> */}
+          <Drawer
+            isOpen={this.state.menu}
+            onClose={this.menuCloseHandler}
+          />
+
+          <Route path="/auth" component={Auth} />
+          <Route path="/quiz-creator" component={QuizCreator} />
+          <Route path="/quiz/:id" component={Main} />
+          <Route exact path="/" component={QuizList} />
+
+          <MenuToggle 
+            onToggle={this.toggleMenuHandler} 
+            isOpen={this.state.menu}
+          />
+
+          {/* <Main /> */}
+      </BrowserRouter>
     );
   }
 

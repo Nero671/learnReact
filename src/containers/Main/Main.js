@@ -1,7 +1,7 @@
 import React from 'react';
 import './Main.css';
-import ActiveQuize from '../ActiveQuize/ActiveQuize';
-import FinishedQuize from '../FinishedQuize/FinishedQuize';
+import ActiveQuize from '../../ActiveQuize/ActiveQuize';
+import FinishedQuize from '../../FinishedQuize/FinishedQuize';
 
 
 class Main extends React.Component {
@@ -122,6 +122,9 @@ class Main extends React.Component {
       results: {}
     })
   }
+
+  
+
 
   render() {
     return (
