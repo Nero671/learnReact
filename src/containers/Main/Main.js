@@ -2,6 +2,8 @@ import React from 'react';
 import './Main.css';
 import ActiveQuize from '../../ActiveQuize/ActiveQuize';
 import FinishedQuize from '../../FinishedQuize/FinishedQuize';
+import axios from 'axios';
+import Loader from '../../Ui/Loader/Loader';
 
 
 class Main extends React.Component {
@@ -11,57 +13,11 @@ class Main extends React.Component {
     isFinished: false,
     activeQuestion: 0,
     answerState: null,
-    quize: [
-      {
-        question: 'Какого цвета небо?',
-        rightAnswerId: 2, 
-        id: 1,
-        answers: [
-          {
-            text: 'Черный',
-            id: 1
-          },
-          {
-            text: 'Синий',
-            id: 2
-          },
-          {
-            text: 'Крассный',
-            id: 3
-          },
-          {
-            text: 'Зеленый',
-            id: 4
-          }
-        ]
-      },
-      {
-        question: 'В каком году основали Минск?',
-        rightAnswerId: 3, 
-        id: 2,
-        answers: [
-          {
-            text: '1400',
-            id: 1
-          },
-          {
-            text: '949',
-            id: 2
-          },
-          {
-            text: '1067',
-            id: 3
-          },
-          {
-            text: '1323',
-            id: 4
-          }
-        ]
-      }
-    ]
+    quize: [],
+    loading: true
   }
 
-  onAnswerClickHandler = (answerId) => {
+  onAnswerClickHandler = answerId => {
 
     if(this.state.answerState) {
       const key = Object.keys(this.state.answerState)[0]
@@ -123,7 +79,20 @@ class Main extends React.Component {
     })
   }
 
-  
+  async componentDidMount() {
+    try{
+      const response = await axios.get(`https://react-quiz-e72e9-default-rtdb.firebaseio.com/quizes/${this.props.match.params.id}.json`);
+      const quize = response.data;
+
+      this.setState({
+        quize,
+        loading: false
+      });
+
+    } catch(err) {
+      console.log(err);
+    } 
+  }
 
 
   render() {
@@ -131,21 +100,25 @@ class Main extends React.Component {
       <main className="main">
         <div className="QuizWrapper">
           <h1>Ответьте на все вопросы</h1>
-          { 
-            this.state.isFinished ?
-              <FinishedQuize 
-                results={this.state.results}
-                quize={this.state.quize}
-                onRetry={this.retryHandler}
-              /> :
-                <ActiveQuize
-                  answers={this.state.quize[this.state.activeQuestion].answers}
-                  question = {this.state.quize[this.state.activeQuestion].question}
-                  onAnswerClick = {this.onAnswerClickHandler}
-                  quizeLength = {this.state.quize.length}
-                  answerNumber = {this.state.activeQuestion + 1}
-                  state={this.state.answerState}
-                />
+
+          {
+          this.state.loading 
+            ? <Loader/> 
+              :  
+                this.state.isFinished ?
+                  <FinishedQuize 
+                    results={this.state.results}
+                    quize={this.state.quize}
+                    onRetry={this.retryHandler}
+                  /> :
+                    <ActiveQuize
+                      answers={this.state.quize[this.state.activeQuestion].answers}
+                      question = {this.state.quize[this.state.activeQuestion].question}
+                      onAnswerClick = {this.onAnswerClickHandler}
+                      quizeLength = {this.state.quize.length}
+                      answerNumber = {this.state.activeQuestion + 1}
+                      state={this.state.answerState}
+                    />
           }
         </div>
       </main>
